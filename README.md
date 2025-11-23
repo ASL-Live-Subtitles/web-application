@@ -96,4 +96,5 @@ async def preflight_handler(rest_of_path: str):
 ```
 
 ### Testing 
-<img width="858" height="613" alt="Screenshot 2025-11-23 at 5 37 34 PM" src="https://github.com/user-attachments/assets/0f00574f-b0ce-4e3c-9a75-4a6e01ce8953" />
+
+<img width="657" height="485" alt="Screenshot 2025-11-23 at 6 32 54 PM" src="https://github.com/user-attachments/assets/6728e4f7-ca9a-458b-8d8f-2fd6dde56f53" />
