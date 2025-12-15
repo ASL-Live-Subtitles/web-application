@@ -1,6 +1,4 @@
-// src/main.ts
-
-import { RunPipe, PipelineRequest } from "./api.js";
+import { RunPipe, PipelineRequest, getUser, login, logout } from "./api.js";
 
 function parseList(text: string): string[] {
   return text
@@ -10,6 +8,48 @@ function parseList(text: string): string[] {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ---------- AUTH UI ----------
+  const token = new URLSearchParams(window.location.search).get("token");
+  if (token) {
+    localStorage.setItem("auth_token", token);
+    window.history.replaceState({}, "", window.location.pathname);
+  }
+  const authStatus = document.getElementById("auth-status") as HTMLSpanElement;
+  const loginLink = document.getElementById("login-link") as HTMLAnchorElement;
+  const logoutLink = document.getElementById("logout-link") as HTMLAnchorElement;
+
+  loginLink.onclick = (e) => {
+    e.preventDefault();
+    login();
+  };
+
+  logoutLink.onclick = (e) => {
+    e.preventDefault();
+    logout();
+  };
+
+  async function loadUser() {
+    try {
+      const data = await getUser();
+      if (!data) {
+        authStatus.textContent = "Not signed in";
+        loginLink.style.display = "inline";
+        logoutLink.style.display = "none";
+        return;
+      }
+
+      const user = data.user;
+      authStatus.textContent = `Signed in as ${user.name || user.email}`;
+      loginLink.style.display = "none";
+      logoutLink.style.display = "inline";
+    } catch {
+      authStatus.textContent = "Auth error";
+    }
+  }
+
+  loadUser();
+
+  // ---------- PIPELINE FORM ----------
   const form = document.getElementById("asl-form") as HTMLFormElement;
   const glossesInput = document.getElementById("glosses-input") as HTMLInputElement;
   const lettersInput = document.getElementById("letters-input") as HTMLInputElement;
